@@ -15,15 +15,21 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 
-interface BookListProps {
-  authorId: string;
-  onBookSelect: (book: any) => void;
+interface Book {
+  key: string;
+  title: string;
+  description?: string;
+  covers?: number[];
 }
 
-const BookList: React.FC<BookListProps> = ({ authorId, onBookSelect }) => {
-  const [books, setBooks] = useState<any[]>([]);
+interface BookListProps {
+  authorId: string;
+}
+
+function BookList({ authorId }: BookListProps) {
+  const [books, setBooks] = useState<Book[]>([]);
   const [open, setOpen] = useState(false);
-  const [selectedBook, setSelectedBook] = useState<any | null>(null);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -36,7 +42,7 @@ const BookList: React.FC<BookListProps> = ({ authorId, onBookSelect }) => {
     }
   }, [authorId]);
 
-  const handleBookSelect = (book: any) => {
+  const handleBookSelect = (book: Book) => {
     setSelectedBook(book);
     setOpen(true);
   };
@@ -55,7 +61,9 @@ const BookList: React.FC<BookListProps> = ({ authorId, onBookSelect }) => {
           component="img"
           image={coverUrl}
           alt={selectedBook.title}
-          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => (e.currentTarget.src = '/images/book_cover_placeholder.gif')}
+          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+            e.currentTarget.src = '/images/book_cover_placeholder.gif';
+          }}
           style={{ maxWidth: '200px', marginRight: '20px' }}
         />
       );
@@ -110,12 +118,7 @@ const BookList: React.FC<BookListProps> = ({ authorId, onBookSelect }) => {
       <Dialog open={open} onClose={handleClose} aria-labelledby="book-dialog-title">
         <DialogTitle id="book-dialog-title">
           {selectedBook?.title}
-          <IconButton
-            edge="end"
-            color="inherit"
-            onClick={handleClose}
-            aria-label="close"
-          >
+          <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
             <CloseIcon />
           </IconButton>
         </DialogTitle>
@@ -132,6 +135,6 @@ const BookList: React.FC<BookListProps> = ({ authorId, onBookSelect }) => {
       </Dialog>
     </Container>
   );
-};
+}
 
 export default BookList;

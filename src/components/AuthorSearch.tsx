@@ -11,19 +11,19 @@ interface AuthorSearchProps {
   onAuthorSelect: (authorId: string) => void;
 }
 
-const AuthorSearch: React.FC<AuthorSearchProps> = ({ onAuthorSelect }) => {
+function AuthorSearch({ onAuthorSelect }: AuthorSearchProps) {
   const [authors, setAuthors] = useState<Author[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSearch = async (query: string) => {
     if (query) {
       setLoading(true);
-      setAuthors([]); // Clear the list immediately
+      setAuthors([]);
       try {
         const response = await axios.get(`https://openlibrary.org/search/authors.json?q=${query}`);
         setAuthors(response.data.docs.slice(0, 5)); // Limit results to top 5
       } catch (error) {
-        console.error("Failed to fetch authors", error);
+        console.error('Failed to fetch authors', error);
       } finally {
         setLoading(false);
       }
@@ -40,9 +40,9 @@ const AuthorSearch: React.FC<AuthorSearchProps> = ({ onAuthorSelect }) => {
       onChange={(event, newValue) => onAuthorSelect(newValue?.key || '')}
       loading={loading}
       renderInput={(params) => (
-        <TextField 
-          {...params} 
-          label="Search for an author" 
+        <TextField
+          {...params}
+          label="Search for an author"
           InputProps={{
             ...params.InputProps,
             endAdornment: (
@@ -61,6 +61,6 @@ const AuthorSearch: React.FC<AuthorSearchProps> = ({ onAuthorSelect }) => {
       )}
     />
   );
-};
+}
 
 export default AuthorSearch;

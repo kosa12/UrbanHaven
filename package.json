@@ -26,8 +26,10 @@
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
+    "@types/react": "^18.3.12",
     "axios": "^1.7.7",
-    "react-adsense": "^0.1.0"
+    "react-adsense": "^0.1.0",
+    "react-dom": "^18.3.1"
   },
   "scripts": {
     "dev": "vite",
