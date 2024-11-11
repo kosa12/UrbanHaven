@@ -11,30 +11,50 @@ import {
   IconButton,
   Box,
   Container,
+  Skeleton,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
+
+
 
 interface Book {
   key: string;
   title: string;
   description?: string;
   covers?: number[];
+  cover_i?: number;
 }
 
 interface BookListProps {
   authorId: string;
 }
 
+const placeholderBooks = Array.from({ length: 5 }, (_, i) => ({ id: `placeholder-${i}` }));
+
 function BookList({ authorId }: BookListProps) {
   const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   useEffect(() => {
     const fetchBooks = async () => {
-      const response = await axios.get(`https://openlibrary.org/authors/${authorId}/works.json?limit=10`);
-      setBooks(response.data.entries.slice(0, 5));
+      setLoading(true);
+      try {
+        const response = await axios.get<{ entries: Book[] }>(
+          `https://openlibrary.org/authors/${authorId}/works.json?limit=10`
+        );
+        const fetchedBooks = response.data.entries.slice(0, 5).map((book) => ({
+          ...book,
+          cover_i: book.covers?.[0],
+        }));
+        setBooks(fetchedBooks);
+      } catch (error) {
+        console.error('Error fetching books:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     if (authorId) {
@@ -52,67 +72,53 @@ function BookList({ authorId }: BookListProps) {
     setSelectedBook(null);
   };
 
-  const renderCoverImage = () => {
-    if (selectedBook && selectedBook.covers && selectedBook.covers.length > 0) {
-      const coverId = selectedBook.covers[0];
-      const coverUrl = `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`;
-      return (
-        <CardMedia
-          component="img"
-          image={coverUrl}
-          alt={selectedBook.title}
-          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-            e.currentTarget.src = '/images/book_cover_placeholder.gif';
-          }}
-          style={{ maxWidth: '200px', marginRight: '20px' }}
-        />
-      );
-    }
-    return (
-      <CardMedia
-        component="img"
-        image="/images/book_cover_placeholder.gif"
-        alt="No cover available"
-        style={{ maxWidth: '200px', marginRight: '20px' }}
-      />
-    );
-  };
-
   return (
     <Container style={{ marginTop: '20px' }}>
       <Grid container spacing={3}>
-        {books.map((book) => (
-          <Grid item xs={12} sm={6} md={4} key={book.key}>
-            <Card
-              onClick={() => handleBookSelect(book)}
-              style={{
-                cursor: 'pointer',
-                maxHeight: '300px',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <CardMedia
-                component="img"
-                height="150"
-                image={
-                  book.covers && book.covers.length > 0
-                    ? `https://covers.openlibrary.org/b/id/${book.covers[0]}-M.jpg`
-                    : '/images/booklist_placeholder.png'
-                }
-                alt={book.title}
-              />
-              <CardContent>
-                <Typography variant="h6" component="div" noWrap>
-                  {book.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" noWrap>
-                  {book.description || 'No description available'}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+        {loading
+          ? placeholderBooks.map((placeholder) => (
+              <Grid item xs={12} sm={6} md={4} key={placeholder.id}>
+                <Card>
+                  <Skeleton variant="rectangular" height={150} />
+                  <CardContent>
+                    <Skeleton variant="text" width="80%" />
+                    <Skeleton variant="text" width="60%" />
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))
+          : books.map((book) => (
+              <Grid item xs={12} sm={6} md={4} key={book.key}>
+                <Card
+                  onClick={() => handleBookSelect(book)}
+                  style={{
+                    cursor: 'pointer',
+                    maxHeight: '300px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    height="150"
+                    image={
+                      book.covers && book.covers.length > 0
+                        ? `https://covers.openlibrary.org/b/id/${book.covers[0]}-M.jpg`
+                        : '/images/booklist_placeholder.png'
+                    }
+                    alt={book.title}
+                  />
+                  <CardContent>
+                    <Typography variant="h6" component="div" noWrap>
+                      {book.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" noWrap>
+                      {book.description || 'No description available'}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
       </Grid>
 
       <Dialog open={open} onClose={handleClose} aria-labelledby="book-dialog-title">
@@ -124,7 +130,25 @@ function BookList({ authorId }: BookListProps) {
         </DialogTitle>
         <DialogContent>
           <Box display="flex" alignItems="center">
-            {renderCoverImage()}
+            {selectedBook && selectedBook.cover_i ? (
+              <CardMedia
+                component="img"
+                loading="lazy"
+                image={`https://covers.openlibrary.org/b/id/${selectedBook.cover_i}-L.jpg`}
+                alt={selectedBook.title}
+                onError={(e) => {
+                  e.currentTarget.src = '/images/book_cover_placeholder.gif';
+                }}
+                style={{ maxWidth: '200px', marginRight: '20px' }}
+              />
+            ) : (
+              <CardMedia
+                component="img"
+                image="/images/book_cover_placeholder.gif"
+                alt="No cover available"
+                style={{ maxWidth: '200px', marginRight: '20px' }}
+              />
+            )}
             <Box marginLeft={2}>
               <Typography variant="body1" paragraph>
                 {selectedBook?.description || 'No description available'}

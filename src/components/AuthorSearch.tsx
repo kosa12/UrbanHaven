@@ -18,7 +18,6 @@ function AuthorSearch({ onAuthorSelect }: AuthorSearchProps) {
   const handleSearch = async (query: string) => {
     if (query) {
       setLoading(true);
-      setAuthors([]);
       try {
         const response = await axios.get(`https://openlibrary.org/search/authors.json?q=${query}`);
         setAuthors(response.data.docs.slice(0, 5)); // Limit results to top 5

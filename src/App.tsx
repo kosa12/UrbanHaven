@@ -4,7 +4,7 @@ import AuthorSearch from './components/AuthorSearch';
 import BookList from './components/BookList';
 
 interface Book {
-  cover_i: number;
+  cover_i?: number;
   title: string;
 }
 
@@ -18,7 +18,7 @@ function App() {
         OpenLibrary Client
       </Typography>
       <AuthorSearch onAuthorSelect={(authorId) => setSelectedAuthor(authorId)} />
-      {selectedAuthor && <BookList authorId={selectedAuthor} onBookSelect={(book) => setSelectedBook(book)} />}
+      {selectedAuthor && <BookList authorId={selectedAuthor} />}
       <Modal open={Boolean(selectedBook)} onClose={() => setSelectedBook(null)}>
         <Box
           sx={{
