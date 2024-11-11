@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { List, ListItem, ListItemText, Dialog, DialogContent, DialogTitle, IconButton, Box, Typography } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Grid,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Box,
+  Container,
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 
@@ -15,7 +27,7 @@ const BookList: React.FC<BookListProps> = ({ authorId, onBookSelect }) => {
 
   useEffect(() => {
     const fetchBooks = async () => {
-      const response = await axios.get(`https://openlibrary.org/authors/${authorId}/works.json?limit=100`);
+      const response = await axios.get(`https://openlibrary.org/authors/${authorId}/works.json?limit=10`);
       setBooks(response.data.entries.slice(0, 5));
     };
 
@@ -26,7 +38,6 @@ const BookList: React.FC<BookListProps> = ({ authorId, onBookSelect }) => {
 
   const handleBookSelect = (book: any) => {
     setSelectedBook(book);
-    console.log('selectedBook:', selectedBook);
     setOpen(true);
   };
 
@@ -40,27 +51,63 @@ const BookList: React.FC<BookListProps> = ({ authorId, onBookSelect }) => {
       const coverId = selectedBook.covers[0];
       const coverUrl = `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`;
       return (
-        <img src={coverUrl} alt={selectedBook.title} style={{ maxWidth: '150px', marginRight: '20px' }} />
+        <CardMedia
+          component="img"
+          image={coverUrl}
+          alt={selectedBook.title}
+          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => (e.currentTarget.src = '/images/book_cover_placeholder.gif')}
+          style={{ maxWidth: '200px', marginRight: '20px' }}
+        />
       );
     }
-    return <div style={{ padding: '20px', textAlign: 'center' }}>No cover available</div>;
+    return (
+      <CardMedia
+        component="img"
+        image="/images/book_cover_placeholder.gif"
+        alt="No cover available"
+        style={{ maxWidth: '200px', marginRight: '20px' }}
+      />
+    );
   };
 
   return (
-    <div>
-      <List>
+    <Container style={{ marginTop: '20px' }}>
+      <Grid container spacing={3}>
         {books.map((book) => (
-          <ListItem
-            component="button"
-            key={book.key}
-            onClick={() => handleBookSelect(book)}
-          >
-            <ListItemText primary={book.title} />
-          </ListItem>
+          <Grid item xs={12} sm={6} md={4} key={book.key}>
+            <Card
+              onClick={() => handleBookSelect(book)}
+              style={{
+                cursor: 'pointer',
+                maxHeight: '300px',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <CardMedia
+                component="img"
+                height="150"
+                image={
+                  book.covers && book.covers.length > 0
+                    ? `https://covers.openlibrary.org/b/id/${book.covers[0]}-M.jpg`
+                    : '/images/booklist_placeholder.png'
+                }
+                alt={book.title}
+              />
+              <CardContent>
+                <Typography variant="h6" component="div" noWrap>
+                  {book.title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" noWrap>
+                  {book.description || 'No description available'}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-      </List>
+      </Grid>
 
-      <Dialog open={open} onClose={handleClose} aria-labelledby="book-dialog-title" aria-describedby="book-dialog-description">
+      <Dialog open={open} onClose={handleClose} aria-labelledby="book-dialog-title">
         <DialogTitle id="book-dialog-title">
           {selectedBook?.title}
           <IconButton
@@ -75,7 +122,7 @@ const BookList: React.FC<BookListProps> = ({ authorId, onBookSelect }) => {
         <DialogContent>
           <Box display="flex" alignItems="center">
             {renderCoverImage()}
-            <Box>
+            <Box marginLeft={2}>
               <Typography variant="body1" paragraph>
                 {selectedBook?.description || 'No description available'}
               </Typography>
@@ -83,7 +130,7 @@ const BookList: React.FC<BookListProps> = ({ authorId, onBookSelect }) => {
           </Box>
         </DialogContent>
       </Dialog>
-    </div>
+    </Container>
   );
 };
 

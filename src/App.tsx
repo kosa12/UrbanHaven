@@ -33,9 +33,10 @@ const App: React.FC = () => {
          }}>
           {selectedBook && (
             <img
-              src={`https://covers.openlibrary.org/b/id/${selectedBook.cover_i}-L.jpg`}
+              src={`https://covers.openlibrary.org/b/id/${selectedBook.cover_i}-M.jpg`}
               alt={selectedBook.title}
-              onError={(e) => e.currentTarget.src = '/placeholder.png'}
+              loading="lazy"
+              onError={(e) => (e.currentTarget.src = '/images/book_cover_placeholder.gif')}
             />
           )}
         </Box>
