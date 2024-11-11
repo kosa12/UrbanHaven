@@ -15,8 +15,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
-
-
+import '../styles/BookList.css';
 
 interface Book {
   key: string;
@@ -73,52 +72,44 @@ function BookList({ authorId }: BookListProps) {
   };
 
   return (
-    <Container style={{ marginTop: '20px' }}>
+    <Container className="container">
       <Grid container spacing={3}>
-        {loading
-          ? placeholderBooks.map((placeholder) => (
-              <Grid item xs={12} sm={6} md={4} key={placeholder.id}>
-                <Card>
-                  <Skeleton variant="rectangular" height={150} />
-                  <CardContent>
-                    <Skeleton variant="text" width="80%" />
-                    <Skeleton variant="text" width="60%" />
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))
-          : books.map((book) => (
-              <Grid item xs={12} sm={6} md={4} key={book.key}>
-                <Card
-                  onClick={() => handleBookSelect(book)}
-                  style={{
-                    cursor: 'pointer',
-                    maxHeight: '300px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    height="150"
-                    image={
-                      book.covers && book.covers.length > 0
-                        ? `https://covers.openlibrary.org/b/id/${book.covers[0]}-M.jpg`
-                        : '/images/booklist_placeholder.png'
-                    }
-                    alt={book.title}
-                  />
-                  <CardContent>
-                    <Typography variant="h6" component="div" noWrap>
-                      {book.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {book.description || 'No description available'}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
+      {loading
+        ? placeholderBooks.map((placeholder) => (
+            <Grid item xs={12} sm={6} md={4} key={placeholder.id}>
+              <Card className="skeleton-card-container">
+                <Skeleton variant="rectangular" className="skeleton-card"/>
+                <CardContent className="skeleton-content">
+                  <Skeleton variant="text" width="80%" />
+                  <Skeleton variant="text" width="60%" />
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        : books.map((book) => (
+            <Grid item xs={12} sm={6} md={4} key={book.key}>
+              <Card className="card" onClick={() => handleBookSelect(book)}>
+                <CardMedia
+                  className="card-media"
+                  component="img"
+                  image={
+                    book.covers && book.covers.length > 0
+                      ? `https://covers.openlibrary.org/b/id/${book.covers[0]}-M.jpg`
+                      : '/images/booklist_placeholder.png'
+                  }
+                  alt={book.title}
+                />
+                <CardContent>
+                  <Typography variant="h6" component="div" noWrap>
+                    {book.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" noWrap>
+                    {book.description || 'No description available'}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
       </Grid>
 
       <Dialog open={open} onClose={handleClose} aria-labelledby="book-dialog-title">
@@ -128,8 +119,8 @@ function BookList({ authorId }: BookListProps) {
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <DialogContent>
-          <Box display="flex" alignItems="center">
+        <DialogContent className="dialog-content">
+          <Box>
             {selectedBook && selectedBook.cover_i ? (
               <CardMedia
                 component="img"
@@ -139,14 +130,14 @@ function BookList({ authorId }: BookListProps) {
                 onError={(e) => {
                   e.currentTarget.src = '/images/book_cover_placeholder.gif';
                 }}
-                style={{ maxWidth: '200px', marginRight: '20px' }}
+                className="dialog-media"
               />
             ) : (
               <CardMedia
                 component="img"
                 image="/images/book_cover_placeholder.gif"
                 alt="No cover available"
-                style={{ maxWidth: '200px', marginRight: '20px' }}
+                className="dialog-media"
               />
             )}
             <Box marginLeft={2}>

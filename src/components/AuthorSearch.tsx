@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Autocomplete, TextField, CircularProgress } from '@mui/material';
 import axios from 'axios';
+import '../styles/AuthorSearch.css';
 
 interface Author {
   key: string;
@@ -20,7 +21,7 @@ function AuthorSearch({ onAuthorSelect }: AuthorSearchProps) {
       setLoading(true);
       try {
         const response = await axios.get(`https://openlibrary.org/search/authors.json?q=${query}`);
-        setAuthors(response.data.docs.slice(0, 5)); // Limit results to top 5
+        setAuthors(response.data.docs.slice(0, 5));
       } catch (error) {
         console.error('Failed to fetch authors', error);
       } finally {
@@ -33,6 +34,7 @@ function AuthorSearch({ onAuthorSelect }: AuthorSearchProps) {
 
   return (
     <Autocomplete
+      className="autocomplete-root"
       options={authors}
       getOptionLabel={(option) => option.name}
       onInputChange={(event, value) => handleSearch(value)}
@@ -46,7 +48,7 @@ function AuthorSearch({ onAuthorSelect }: AuthorSearchProps) {
             ...params.InputProps,
             endAdornment: (
               <>
-                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {loading ? <CircularProgress className="loading-spinner" size={20} /> : null}
                 {params.InputProps.endAdornment}
               </>
             ),

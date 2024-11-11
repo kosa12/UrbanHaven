@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Typography, Modal, Box } from '@mui/material';
 import AuthorSearch from './components/AuthorSearch';
 import BookList from './components/BookList';
+import './styles/App.css';
 
 interface Book {
   cover_i?: number;
@@ -20,24 +21,7 @@ function App() {
       <AuthorSearch onAuthorSelect={(authorId) => setSelectedAuthor(authorId)} />
       {selectedAuthor && <BookList authorId={selectedAuthor} />}
       <Modal open={Boolean(selectedBook)} onClose={() => setSelectedBook(null)}>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            maxWidth: 600,
-            padding: 3,
-            margin: 'auto',
-            backgroundColor: '#f5f5f5',
-            borderRadius: 2,
-            boxShadow: 3,
-            '&:hover': {
-              backgroundColor: '#e0e0e0',
-            },
-          }}
-        >
+        <Box className="modal-content">
           {selectedBook && (
             <img
               src={`https://covers.openlibrary.org/b/id/${selectedBook.cover_i}-M.jpg`}
