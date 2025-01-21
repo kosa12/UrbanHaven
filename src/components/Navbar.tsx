@@ -2,7 +2,7 @@ import React from 'react';
 import { AppBar, Toolbar, Button } from '@mui/material';
 import Link from 'next/link';
 
-const Navbar = () => {
+function Navbar() {
   return (
     <AppBar position="static">
       <Toolbar>
@@ -15,6 +15,6 @@ const Navbar = () => {
       </Toolbar>
     </AppBar>
   );
-};
+}
 
 export default Navbar;

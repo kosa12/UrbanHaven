@@ -11,12 +11,21 @@ interface Ingatlan {
   tulajdonosId: number;
 }
 
+const defaultIngatlan: Ingatlan = {
+  cim: '',
+  leiras: '',
+  arPenz: 0,
+  feltoltesiDatum: '',
+  allapot: '',
+  tulajdonosId: 1,
+};
+
 interface IngatlanFormProps {
   onSubmit: (ingatlan: Ingatlan) => void;
   initialData?: Ingatlan;
 }
 
-const IngatlanForm: React.FC<IngatlanFormProps> = ({ onSubmit, initialData = {} }) => {
+function IngatlanForm({ onSubmit, initialData = defaultIngatlan }: IngatlanFormProps) {
   const [ingatlan, setIngatlan] = useState<Ingatlan>({
     cim: initialData.cim || '',
     leiras: initialData.leiras || '',
@@ -90,8 +99,9 @@ const IngatlanForm: React.FC<IngatlanFormProps> = ({ onSubmit, initialData = {} 
         margin="normal"
       />
       <TextField
-        name="tulajdonos.nev"
-        label="Tulajdonos neve"
+        name="tulajdonosId"
+        label="Tulajdonos ID"
+        type="number"
         value={ingatlan.tulajdonosId}
         onChange={handleChange}
         fullWidth
@@ -102,6 +112,6 @@ const IngatlanForm: React.FC<IngatlanFormProps> = ({ onSubmit, initialData = {} 
       </Button>
     </form>
   );
-};
+}
 
 export default IngatlanForm;

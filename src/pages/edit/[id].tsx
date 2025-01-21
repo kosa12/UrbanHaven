@@ -1,11 +1,11 @@
 import React from 'react';
-import { useIngatlanById, useUpdateIngatlan } from '../../hooks/useIngatlanok';
 import { useRouter } from 'next/router';
+import { useIngatlanById, useUpdateIngatlan } from '../../hooks/useIngatlanok';
 import IngatlanForm from '../../components/IngatlanForm';
 import Navbar from '../../components/Navbar';
 import { Ingatlan } from '../../api/ingatlanok';
 
-const EditIngatlan = () => {
+function EditIngatlan() {
   const router = useRouter();
   const { id } = router.query;
 
@@ -37,6 +37,6 @@ const EditIngatlan = () => {
       <IngatlanForm onSubmit={handleSubmit} initialData={ingatlan} />
     </div>
   );
-};
+}
 
 export default EditIngatlan;

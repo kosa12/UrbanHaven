@@ -2,7 +2,7 @@ import React from 'react';
 import { useIngatlanok } from '../hooks/useIngatlanok';
 import Navbar from '../components/Navbar';
 
-const HomePage = () => {
+function HomePage() {
   const { data: ingatlanok, isLoading, isError } = useIngatlanok();
 
   if (isLoading) return <div>Loading...</div>;
@@ -21,6 +21,6 @@ const HomePage = () => {
       </ul>
     </div>
   );
-};
+}
 
 export default HomePage;

@@ -1,9 +1,9 @@
 import React from 'react';
-import { useIngatlanById } from '../../hooks/useIngatlanok';
 import { useRouter } from 'next/router';
+import { useIngatlanById } from '../../hooks/useIngatlanok';
 import Navbar from '../../components/Navbar';
 
-const IngatlanDetails = () => {
+function IngatlanDetails() {
   const router = useRouter();
   const { id } = router.query;
 
@@ -23,6 +23,7 @@ const IngatlanDetails = () => {
       <p>{ingatlan.allapot}</p>
 
       <button
+        type="button"
         onClick={() => router.push(`/edit/${id}`)}
         style={{
           marginTop: '20px',
@@ -38,6 +39,6 @@ const IngatlanDetails = () => {
       </button>
     </div>
   );
-};
+}
 
 export default IngatlanDetails;

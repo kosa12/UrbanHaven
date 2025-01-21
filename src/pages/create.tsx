@@ -1,11 +1,11 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { useCreateIngatlan } from '../hooks/useIngatlanok';
 import IngatlanForm from '../components/IngatlanForm';
 import Navbar from '../components/Navbar';
-import { useRouter } from 'next/router';
 import { Ingatlan } from '../api/ingatlanok';
 
-const CreateIngatlan = () => {
+function CreateIngatlan() {
   const router = useRouter();
   const createMutation = useCreateIngatlan();
 
@@ -24,6 +24,6 @@ const CreateIngatlan = () => {
       <IngatlanForm onSubmit={handleSubmit} />
     </div>
   );
-};
+}
 
 export default CreateIngatlan;
