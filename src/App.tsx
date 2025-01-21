@@ -1,41 +1,15 @@
-import React, { useState } from 'react';
-import { Container, Typography, Modal, Box } from '@mui/material';
-import AuthorSearch from './components/AuthorSearch';
-import BookList from './components/BookList';
-import './styles/App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages';
+import AboutPage from './pages/about';
 
-interface Book {
-  cover_i?: number;
-  title: string;
-}
-
-function App() {
-  const [selectedAuthor, setSelectedAuthor] = useState<string | null>(null);
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
-
+export default function App() {
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        OpenLibrary Client
-      </Typography>
-      <AuthorSearch onAuthorSelect={(authorId) => setSelectedAuthor(authorId)} />
-      {selectedAuthor && <BookList authorId={selectedAuthor} />}
-      <Modal open={Boolean(selectedBook)} onClose={() => setSelectedBook(null)}>
-        <Box className="modal-content">
-          {selectedBook && (
-            <img
-              src={`https://covers.openlibrary.org/b/id/${selectedBook.cover_i}-M.jpg`}
-              alt={selectedBook.title}
-              loading="lazy"
-              onError={(e) => {
-                e.currentTarget.src = '/images/book_cover_placeholder.gif';
-              }}
-            />
-          )}
-        </Box>
-      </Modal>
-    </Container>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+      </Routes>
+    </Router>
   );
 }
-
-export default App;
