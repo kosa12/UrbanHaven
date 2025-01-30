@@ -2,12 +2,11 @@
 import { useState, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { useTranslation } from "next-i18next";
-import "../../i18n";
 import IngatlanCard from "./components/IngatlanCard";
 import { Ingatlan } from "../types";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import "./styles/globals.css";
+import "../../i18n";
 
 const mockIngatlanok: Ingatlan[] = Array.from({ length: 20 }, (_, i) => ({
   id: i + 1,
