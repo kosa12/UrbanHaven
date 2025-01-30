@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
+
+body {
+  background-color: white;
+  color: black;
+  font-family: "Noto Sans SC", sans-serif;
+}
+
+.dark body {
+  background-color: #1a202c; /* Tailwind's gray-900 */
+  color: white;
+}
