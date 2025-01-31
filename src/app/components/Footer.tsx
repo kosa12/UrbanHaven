@@ -18,11 +18,6 @@ export default function Footer() {
                   {t("home")}
                 </Link>
               </li>
-              <li>
-                <Link href="/contact" className="hover:text-gray-300">
-                  {t("contact")}
-                </Link>
-              </li>
             </ul>
           </div>
 

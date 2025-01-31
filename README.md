@@ -6,5 +6,6 @@ TODOs:
 - [ ] Authn/Authz
 - [x] Languages
 - [x] PWA workbox & manifest
-- [ ] PWA service worker cache
+- [x] PWA service worker cache
 - [ ] PWA push notification
+- [ ] CRUD

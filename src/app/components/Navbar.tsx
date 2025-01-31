@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useTranslation } from "next-i18next";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import i18next from "../../../i18n";
 
 const languages = [
   { code: "en", label: "🇬🇧 English" },
@@ -17,12 +17,23 @@ const themes = [
 ];
 
 export default function Navbar() {
-  const { i18n, t } = useTranslation();
   const router = useRouter();
 
-  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(
+    i18next.language
+  );
   const [themeIndex, setThemeIndex] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
+
+  // Retrieve language from localStorage and set it
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("language");
+    if (savedLanguage) {
+      i18next.changeLanguage(savedLanguage).then(() => {
+        setSelectedLanguage(savedLanguage);
+      });
+    }
+  }, []);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -35,7 +46,8 @@ export default function Navbar() {
 
   const handleLanguageChange = (lang: string) => {
     setSelectedLanguage(lang);
-    i18n.changeLanguage(lang).then(() => {
+    i18next.changeLanguage(lang).then(() => {
+      localStorage.setItem("language", lang); // Save the language to localStorage
       router.refresh();
     });
   };
@@ -68,10 +80,10 @@ export default function Navbar() {
     >
       <div className="flex space-x-6">
         <Link href="/" className="text-xl hover:opacity-80">
-          {t("home")}
+          {i18next.t("home")}
         </Link>
-        <Link href="/contact" className="text-xl hover:opacity-80">
-          {t("contact")}
+        <Link href="/tos" className="text-xl hover:opacity-80">
+          {i18next.t("tos")}
         </Link>
       </div>
 

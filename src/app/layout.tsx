@@ -1,4 +1,6 @@
+// app/layout.tsx
 import "./styles/globals.css";
+import { QueryProvider } from "./providers";
 
 export const metadata = {
   title: "Urban Haven",
@@ -18,7 +20,7 @@ export default function RootLayout({
         <link rel="icon" href="/icons/icon.png" />
       </head>
       <body>
-        {children}
+        <QueryProvider>{children}</QueryProvider>
         {/* Add service worker registration script */}
         <script
           dangerouslySetInnerHTML={{
@@ -26,7 +28,7 @@ export default function RootLayout({
               if (typeof window !== "undefined" && "serviceWorker" in navigator) {
                 window.addEventListener("load", () => {
                   navigator.serviceWorker
-                    .register("/sw.js")
+                    .register("/custom-sw.js") // Register the custom service worker
                     .then((registration) => {
                       console.log("Service Worker registered with scope: ", registration.scope);
                     })

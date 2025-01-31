@@ -1,3 +1,10 @@
+export interface Tulajdonos {
+  id: number;
+  nev: string;
+  cim: string;
+  telefonszam: string;
+}
+
 export interface Ingatlan {
   id: number;
   cim: string;
@@ -6,6 +13,8 @@ export interface Ingatlan {
   feltoltesiDatum: string;
   allapot: string;
   kepUrl: string;
+  tulajdonos: Tulajdonos;
+  tulajdonosId: number;
 }
 
 export interface IngatlanImage {

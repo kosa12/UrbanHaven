@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { Ingatlan } from "../types";
+import Link from "next/link";
 
 interface IngatlanCardProps {
   ingatlan: Ingatlan;
@@ -8,7 +9,11 @@ interface IngatlanCardProps {
 
 export default function IngatlanCard({ ingatlan }: IngatlanCardProps) {
   return (
-    <div className="rounded overflow-hidden shadow-lg bg-white dark:bg-gray-800">
+    <Link
+      href={`/ingatlanok/${ingatlan.id}`}
+      passHref
+      className="rounded overflow-hidden shadow-lg bg-white dark:bg-gray-800 transform transition-all duration-300 hover:scale-105"
+    >
       <div className="relative w-full" style={{ height: "300px" }}>
         {ingatlan.kepUrl ? (
           <Image
@@ -41,6 +46,6 @@ export default function IngatlanCard({ ingatlan }: IngatlanCardProps) {
           {ingatlan.feltoltesiDatum}
         </span>
       </div>
-    </div>
+    </Link>
   );
 }

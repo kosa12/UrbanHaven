@@ -21,15 +21,6 @@ const nextConfig: NextConfig = {
     locales: ["en", "hu", "ro"],
     defaultLocale: "en",
   },
-  async redirects() {
-    return [
-      {
-        source: "/old-url",
-        destination: "/new-url",
-        permanent: true,
-      },
-    ];
-  },
 };
 
 export default withPWAConfig(nextConfig);
