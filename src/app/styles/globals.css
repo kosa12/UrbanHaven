@@ -4,13 +4,32 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap");
 
-body {
-  background-color: white;
-  color: black;
-  font-family: "Noto Sans SC", sans-serif;
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --navbar: #f4f4f4;
 }
 
-.dark body {
-  background-color: #1a202c; /* Tailwind's gray-900 */
-  color: white;
+.dark {
+  --background: #1a202c;
+  --foreground: #ffffff;
+  --navbar: #2d3748;
+}
+
+.sepia {
+  --background: #f5e9d5;
+  --foreground: #5b4636;
+  --navbar: #e5d5c5;
+}
+
+/* Apply styles explicitly */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar {
+  background-color: var(--navbar);
+  transition: background-color 0.3s ease;
 }

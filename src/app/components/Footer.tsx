@@ -6,7 +6,7 @@ export default function Footer() {
   const { t } = useTranslation();
 
   return (
-    <footer className="bg-gray-800 dark:bg-gray-500 text-white py-8">
+    <footer className="bg-gray-800 dark:bg-gray-700 text-white py-8">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Quick Links */}

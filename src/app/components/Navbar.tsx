@@ -5,9 +5,15 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const languages = [
-  { code: "en", emoji: "🇬🇧" },
-  { code: "hu", emoji: "🇭🇺" },
-  { code: "ro", emoji: "🇷🇴" },
+  { code: "en", label: "🇬🇧 English" },
+  { code: "hu", label: "🇭🇺 Magyar" },
+  { code: "ro", label: "🇷🇴 Română" },
+];
+
+const themes = [
+  { name: "Light", className: "light", icon: "☀️" },
+  { name: "Dark", className: "dark", icon: "🌙" },
+  { name: "Sepia", className: "sepia", icon: "🎱" },
 ];
 
 export default function Navbar() {
@@ -15,8 +21,17 @@ export default function Navbar() {
   const router = useRouter();
 
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [themeIndex, setThemeIndex] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    const index = themes.findIndex((t) => t.className === savedTheme);
+    if (index !== -1) {
+      setThemeIndex(index);
+      document.documentElement.classList.add(savedTheme!);
+    }
+  }, []);
 
   const handleLanguageChange = (lang: string) => {
     setSelectedLanguage(lang);
@@ -25,25 +40,20 @@ export default function Navbar() {
     });
   };
 
-  const toggleTheme = () => {
-    setIsDarkMode((prev) => !prev);
+  const cycleTheme = () => {
+    const newIndex = (themeIndex + 1) % themes.length;
+    setThemeIndex(newIndex);
+
+    document.documentElement.classList.remove(
+      ...themes.map((t) => t.className)
+    );
+    document.documentElement.classList.add(themes[newIndex].className);
+    localStorage.setItem("theme", themes[newIndex].className);
   };
 
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [isDarkMode]);
-
-  useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setIsSticky(true);
-      } else {
-        setIsSticky(false);
-      }
+      setIsSticky(window.scrollY > 0);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -52,36 +62,44 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`${
+      className={`navbar ${
         isSticky ? "fixed top-0 left-0 right-0 z-50 shadow-lg" : ""
-      } bg-gray-800 dark:bg-gray-500 text-white px-6 py-3 flex justify-between items-center transition-all duration-300`}
+      } text-foreground px-6 py-3 flex justify-between items-center transition-all duration-300`}
     >
       <div className="flex space-x-6">
-        <Link href="/" className="text-xl hover:text-gray-300">
+        <Link href="/" className="text-xl hover:opacity-80">
           {t("home")}
         </Link>
-        <Link href="/contact" className="text-xl hover:text-gray-300">
+        <Link href="/contact" className="text-xl hover:opacity-80">
           {t("contact")}
         </Link>
       </div>
+
       <div className="flex items-center space-x-4">
+        {/* Theme Rotator Button */}
         <button
-          onClick={toggleTheme}
-          className="p-2 bg-gray-700 dark:bg-gray-600 rounded hover:bg-gray-600 dark:hover:bg-gray-500 transition-colors"
+          onClick={cycleTheme}
+          className="p-2 rounded-lg border border-gray-300 bg-gray-200 dark:bg-gray-700 sepia:bg-yellow-200 
+                   text-black dark:text-white sepia:text-brown-800 transition-all"
         >
-          {isDarkMode ? "🌙" : "☀️"}
+          {themes[themeIndex].icon}
         </button>
-        <select
-          value={selectedLanguage}
-          onChange={(e) => handleLanguageChange(e.target.value)}
-          className="bg-gray-700 dark:bg-gray-600 text-white p-2 rounded"
+
+        {/* Language Switcher */}
+        <button
+          onClick={() => {
+            const nextLang =
+              languages[
+                (languages.findIndex((l) => l.code === selectedLanguage) + 1) %
+                  languages.length
+              ].code;
+            handleLanguageChange(nextLang);
+          }}
+          className="px-4 py-2 rounded border border-gray-300 bg-gray-200 dark:bg-gray-700 sepia:bg-yellow-200 
+                     text-black dark:text-white sepia:text-brown-800 transition-all"
         >
-          {languages.map((lang) => (
-            <option key={lang.code} value={lang.code}>
-              {lang.emoji} {lang.code.toUpperCase()}
-            </option>
-          ))}
-        </select>
+          {languages.find((l) => l.code === selectedLanguage)?.label}
+        </button>
       </div>
     </nav>
   );
