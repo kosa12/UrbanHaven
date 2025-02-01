@@ -5,8 +5,10 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { useTranslation } from "next-i18next";
 import useModifyIngatlan from "../hooks/useModifyIngatlan";
+import ModifyIngatlanModal from "./ModifyIngatlanModal";
 import ContactOwnerModal from "./ContactOwnerModal";
 import Image from "next/image";
+import useDeleteIngatlan from "../hooks/useDeleteIngatlan";
 
 interface IngatlanDetailsProps {
   ingatlan: Ingatlan;
@@ -16,6 +18,7 @@ const IngatlanDetails = ({
   ingatlan: initialIngatlan,
 }: IngatlanDetailsProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModifyModalOpen, setIsModifyModalOpen] = useState(false);
   const [ingatlan, setIngatlan] = useState(initialIngatlan);
   const imageUrls = useImageUrls();
   const { t } = useTranslation();
@@ -23,7 +26,12 @@ const IngatlanDetails = ({
     (image) => image.ingatlanId === ingatlan.id
   );
 
-  const { modifyIngatlan, loading, error } = useModifyIngatlan();
+  const { modifyIngatlan, error } = useModifyIngatlan();
+  const {
+    isDeleting,
+    error: deleteError,
+    deleteIngatlan,
+  } = useDeleteIngatlan();
 
   const handleContactOwnerClick = () => {
     console.log("Contacting owner...");
@@ -34,15 +42,20 @@ const IngatlanDetails = ({
     setIsModalOpen(false);
   };
 
-  const handleModify = async () => {
-    const updatedIngatlan: Ingatlan = {
-      ...ingatlan,
-      leiras: "Yummmm",
+  const handleModify = async (updatedIngatlan: Ingatlan) => {
+    await modifyIngatlan(ingatlan.id, {
+      ...updatedIngatlan,
       tulajdonosId: ingatlan.tulajdonos.id,
-    };
+    });
+    setIngatlan({ ...updatedIngatlan, tulajdonosId: ingatlan.tulajdonos.id });
+  };
 
-    await modifyIngatlan(ingatlan.id, updatedIngatlan);
-    setIngatlan(updatedIngatlan);
+  const handleDelete = async () => {
+    const success = await deleteIngatlan(ingatlan.id);
+    if (success) {
+      alert("Ingatlan deleted successfully.");
+      window.location.href = "/";
+    }
   };
 
   return (
@@ -77,6 +90,9 @@ const IngatlanDetails = ({
                 {ingatlan.cim}
               </h1>
               <p className="text-lg text-gray-600 mb-4">{ingatlan.leiras}</p>
+              <p className="text-lg text-gray-600 mb-4">
+                Allapot: {ingatlan.allapot}
+              </p>
               <p className="text-xl text-blue-600 font-semibold mb-4">
                 {ingatlan.arPenz} Ft
               </p>
@@ -90,18 +106,32 @@ const IngatlanDetails = ({
                 >
                   {t("contactOwner")}
                 </button>
+                <div>
+                  <button
+                    className="mt-4 px-6 py-3 bg-yellow-600 text-white font-bold rounded-lg hover:bg-yellow-700 transition-colors duration-200"
+                    onClick={() => setIsModifyModalOpen(true)}
+                  >
+                    Modify
+                  </button>
+
+                  <ModifyIngatlanModal
+                    isOpen={isModifyModalOpen}
+                    onClose={() => setIsModifyModalOpen(false)}
+                    ingatlan={ingatlan}
+                    onSave={handleModify}
+                  />
+                </div>
                 <button
-                  className="mt-4 px-6 py-3 bg-yellow-600 text-white font-bold rounded-lg hover:bg-yellow-700 transition-colors duration-200"
-                  onClick={handleModify}
-                  disabled={loading}
+                  className="mt-4 px-6 py-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors duration-200"
+                  onClick={handleDelete}
+                  disabled={isDeleting}
                 >
-                  {loading ? t("loading") : t("modify")}
-                </button>
-                <button className="mt-4 px-6 py-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors duration-200">
-                  {t("delete")}
+                  {isDeleting ? "Deleting..." : t("delete")}
                 </button>
               </div>
-              {error && <p className="text-red-600 mt-2">{error}</p>}
+              {(error || deleteError) && (
+                <p className="text-red-600 mt-2">{error || deleteError}</p>
+              )}
             </div>
           </div>
         </div>

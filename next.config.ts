@@ -13,6 +13,7 @@ const withPWAConfig = withPWA({
     /react-loadable-manifest\.json$/,
     /server\/.*/,
   ],
+  sw: "/custom-sw.js",
 });
 
 const nextConfig: NextConfig = {
@@ -20,6 +21,9 @@ const nextConfig: NextConfig = {
   i18n: {
     locales: ["en", "hu", "ro"],
     defaultLocale: "en",
+  },
+  images: {
+    domains: ["localhost"],
   },
 };
 

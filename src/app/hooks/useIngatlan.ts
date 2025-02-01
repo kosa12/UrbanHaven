@@ -20,29 +20,35 @@ const useIngatlan = (id: string | null) => {
       setError(null);
 
       try {
+        // Try fetching from cache first
         const cachedIngatlan = await getCache(`/ingatlanok/${id}`);
         if (cachedIngatlan) {
           setIngatlan(cachedIngatlan);
-          setLoading(false);
+          setLoading(false); // Set loading to false if cached
           return;
         }
 
+        // If not cached, attempt to fetch from the network
         const response = await axios.get<Ingatlan>(
           `http://localhost:8081/ingatlanok/${id}`
         );
         setIngatlan(response.data);
-
         await setCache(`/ingatlanok/${id}`, { ...response.data });
       } catch (error) {
+        if (axios.isAxiosError(error)) {
+          setError(error.response?.data?.message || "Failed to fetch ingatlan");
+        } else {
+          setError("Failed to fetch ingatlan");
+        }
         console.error("Failed to fetch ingatlan:", error);
-        setError("Failed to fetch ingatlan");
       } finally {
-        setLoading(false);
+        // Ensure loading is set to false after the fetch attempt, regardless of success
+        if (!ingatlan) setLoading(false); // Avoid premature loading state reset
       }
     };
 
     fetchIngatlan();
-  }, [id]);
+  }, [id]); // Add 'ingatlan' as a dependency to ensure loading is correctly handled
 
   return { ingatlan, loading, error };
 };

@@ -11,17 +11,17 @@ export default function IngatlanCard({ ingatlan }: IngatlanCardProps) {
   return (
     <Link
       href={`/ingatlanok/${ingatlan.id}`}
-      passHref
       className="rounded overflow-hidden shadow-lg bg-white dark:bg-gray-800 transform transition-all duration-300 hover:scale-105"
     >
-      <div className="relative w-full" style={{ height: "300px" }}>
+      <div className="relative w-full h-[300px]">
         {ingatlan.kepUrl ? (
           <Image
-            src={ingatlan.kepUrl}
+            src={`${ingatlan.kepUrl}`}
             alt={ingatlan.cim}
-            layout="fill"
-            objectFit="cover"
-            className="absolute inset-0"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority
+            className="object-cover"
           />
         ) : (
           <div className="w-full h-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-white">

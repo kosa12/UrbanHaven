@@ -82,6 +82,9 @@ export default function Navbar() {
         <Link href="/" className="text-xl hover:opacity-80">
           {i18next.t("home")}
         </Link>
+        <Link href="/upload" className="text-xl hover:opacity-80">
+          {i18next.t("upload")}
+        </Link>
         <Link href="/tos" className="text-xl hover:opacity-80">
           {i18next.t("tos")}
         </Link>
