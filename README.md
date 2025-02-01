@@ -8,10 +8,15 @@ Urban Haven is a modern, responsive property listing website built with Next.js,
 
 - **Home Page**: Displays a list of available properties with key details like price, location, and images.
 - **Property Detail Page**: Provides in-depth information about a specific property, including a gallery, description, and contact details.
-- **Upload Page**: Allows users to upload new property listings with forms for property details, images, and pricing.
 - **CRUD Operations**: Users can create, read, update, and delete property listings.
 - **Responsive Design**: Built with Tailwind CSS for a fully responsive and mobile-friendly experience.
 - **TypeScript Support**: Ensures type safety and improves developer productivity.
+- **Theming**: Supports customizable themes for a personalized user experience.
+- **PWA (Progressive Web App)**:
+  - Workbox & Manifest: Enables offline functionality and app-like installation.
+  - Service Worker Cache: Improves performance by caching assets for offline use.
+- **Multi-language Support**: Supports multiple languages for a global audience (en, hu, ro)
+- **Authentication & Authorization**: *Coming soon* (Work in progress).
 
 ## Technologies Used
 
