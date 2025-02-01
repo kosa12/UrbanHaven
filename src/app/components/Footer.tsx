@@ -18,6 +18,16 @@ export default function Footer() {
                   {t("home")}
                 </Link>
               </li>
+              <li>
+                <Link href="/upload" className="hover:text-gray-300">
+                  {t("upload")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/tos" className="hover:text-gray-300">
+                  {t("tos")}
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -31,7 +41,7 @@ export default function Footer() {
         {/* Copyright Notice */}
         <div className="border-t border-gray-700 mt-8 pt-8 text-center">
           <p className="text-sm">
-            &copy; {new Date().getFullYear()} {t("Kosa Matyas")}.{" "}
+            &copy; {new Date().getFullYear()} - {t("Kosa Matyas")}.{" "}
             {t("allRightsReserved")}.
           </p>
         </div>

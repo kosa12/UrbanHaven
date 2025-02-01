@@ -23,7 +23,12 @@ const nextConfig: NextConfig = {
     defaultLocale: "en",
   },
   images: {
-    domains: ["localhost"],
+    remotePatterns: [
+      {
+        hostname: "localhost",
+        protocol: "http",
+      },
+    ],
   },
 };
 
