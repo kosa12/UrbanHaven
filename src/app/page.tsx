@@ -15,9 +15,8 @@ export default function Home() {
   const [ingatlanok, setIngatlanok] = useState<Ingatlan[]>([]);
   const [page, setPage] = useState(0);
   const { ref, inView } = useInView();
-  const imageUrls = useImageUrls(); // Image URLs from custom hook
+  const imageUrls = useImageUrls();
 
-  // Fetching ingatlan data
   const fetchIngatlanok = async () => {
     try {
       const response = await axios.get("http://localhost:8081/ingatlanok");
@@ -29,7 +28,7 @@ export default function Home() {
           const image = imageUrls.find((img) => img.ingatlanId === ingatlan.id);
           return {
             ...ingatlan,
-            kepUrl: image ? `${image.kepUrl}` : "", // Make sure this is the full path
+            kepUrl: image ? `${image.kepUrl}` : "",
           };
         });
 
@@ -60,7 +59,6 @@ export default function Home() {
     }
   };
 
-  // Load more on inView detection
   useEffect(() => {
     if (inView) {
       loadMoreIngatlanok();

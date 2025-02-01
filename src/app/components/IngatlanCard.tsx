@@ -39,7 +39,7 @@ export default function IngatlanCard({ ingatlan }: IngatlanCardProps) {
       </div>
       <div className="px-6 pt-4 pb-2">
         <span className="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-300 mr-2 mb-2">
-          {ingatlan.arPenz} Ft
+          {ingatlan.arPenz} RON
         </span>
         <br />
         <span className="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-300 mr-2 mb-2">

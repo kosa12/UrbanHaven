@@ -94,7 +94,7 @@ const IngatlanDetails = ({
                 Allapot: {ingatlan.allapot}
               </p>
               <p className="text-xl text-blue-600 font-semibold mb-4">
-                {ingatlan.arPenz} Ft
+                {ingatlan.arPenz} RON
               </p>
               <p className="text-sm text-gray-500 mb-4">
                 <strong>{t("uploadedOn")}:</strong> {ingatlan.feltoltesiDatum}

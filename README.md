@@ -7,5 +7,6 @@ TODOs:
 - [x] Languages
 - [x] PWA workbox & manifest
 - [x] PWA service worker cache
-- [ ] PWA push notification
-- [ ] CRUD
+- [x] CRUD
+- [x] Tailwind
+- [x] NextJS
