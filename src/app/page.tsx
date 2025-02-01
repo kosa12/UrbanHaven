@@ -8,12 +8,14 @@ import { Ingatlan } from "./types";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import useImageUrls from "./hooks/useImageUrls";
+import SkeletonCard from "./components/SkeletonCard"; // Import the SkeletonCard
 import "../../i18n";
 
 export default function Home() {
   const { t } = useTranslation();
   const [ingatlanok, setIngatlanok] = useState<Ingatlan[]>([]);
   const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true); // Track loading state
   const { ref, inView } = useInView();
   const imageUrls = useImageUrls();
 
@@ -23,12 +25,11 @@ export default function Home() {
       const data = response.data;
 
       if (imageUrls.length > 0) {
-        console.log("Image URLs HERE:", imageUrls);
         const ingatlanokWithImages = data.map((ingatlan: Ingatlan) => {
           const image = imageUrls.find((img) => img.ingatlanId === ingatlan.id);
           return {
             ...ingatlan,
-            kepUrl: image ? `${image.kepUrl}` : "",
+            kepUrl: image ? `${image.kepUrl}` : "/images/placeholder-image.jpg",
           };
         });
 
@@ -36,15 +37,16 @@ export default function Home() {
       }
     } catch (error) {
       console.error("Error fetching ingatlanok:", error);
+    } finally {
+      setIsLoading(false); // Set loading to false when done
     }
   };
 
-  // Fetching ingatlanok when imageUrls are ready
   useEffect(() => {
     if (imageUrls.length > 0) {
       fetchIngatlanok();
     }
-  }, [imageUrls]); // Run when imageUrls change
+  }, [imageUrls]);
 
   const loadMoreIngatlanok = () => {
     const nextPage = page + 1;
@@ -73,11 +75,17 @@ export default function Home() {
         <h1 className="text-4xl font-bold mb-8">{t("welcome")}</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {ingatlanok.map((ingatlan) => (
-            <IngatlanCard key={ingatlan.id} ingatlan={ingatlan} />
-          ))}
+          {/* Show skeleton loading while data is being fetched */}
+          {isLoading
+            ? Array(9)
+                .fill(0)
+                .map((_, index) => <SkeletonCard key={index} />)
+            : ingatlanok.map((ingatlan) => (
+                <IngatlanCard key={ingatlan.id} ingatlan={ingatlan} />
+              ))}
         </div>
 
+        {/* Load more trigger */}
         <div ref={ref} className="h-10"></div>
       </div>
 

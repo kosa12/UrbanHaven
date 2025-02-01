@@ -75,6 +75,7 @@ const IngatlanDetails = ({
                 <Image
                   src={matchingImage.kepUrl}
                   alt={ingatlan.cim}
+                  priority
                   className="rounded-lg w-full object-cover h-80 md:h-auto"
                   width={600} // Specify width and height
                   height={400}

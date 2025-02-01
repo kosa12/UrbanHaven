@@ -52,6 +52,7 @@ i18next.use(initReactI18next).init({
         upload: "Upload",
         imageUpload: "Image Upload",
         uploadIngatlan: "Upload Property",
+        modifyIngatlan: "Modify Property",
       },
     },
     hu: {
@@ -98,6 +99,7 @@ i18next.use(initReactI18next).init({
         upload: "Feltöltés",
         imageUpload: "Képfeltöltés",
         uploadIngatlan: "Ingatlan feltöltése",
+        modifyIngatlan: "Ingatlan módosítása",
       },
     },
     ro: {
@@ -144,6 +146,7 @@ i18next.use(initReactI18next).init({
         upload: "Încarcă",
         imageUpload: "Încărcare imagine",
         uploadIngatlan: "Încarcă proprietate",
+        modifyIngatlan: "Modifică proprietate",
       },
     },
   },

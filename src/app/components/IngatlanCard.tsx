@@ -2,12 +2,13 @@
 import Image from "next/image";
 import { Ingatlan } from "../types";
 import Link from "next/link";
+import { memo } from "react";
 
 interface IngatlanCardProps {
   ingatlan: Ingatlan;
 }
 
-export default function IngatlanCard({ ingatlan }: IngatlanCardProps) {
+const IngatlanCard = memo(({ ingatlan }: IngatlanCardProps) => {
   return (
     <Link
       href={`/ingatlanok/${ingatlan.id}`}
@@ -20,8 +21,8 @@ export default function IngatlanCard({ ingatlan }: IngatlanCardProps) {
             alt={ingatlan.cim}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            priority
             className="object-cover"
+            priority
           />
         ) : (
           <div className="w-full h-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-white">
@@ -48,4 +49,9 @@ export default function IngatlanCard({ ingatlan }: IngatlanCardProps) {
       </div>
     </Link>
   );
-}
+});
+
+// Set the display name to avoid the linting error
+IngatlanCard.displayName = "IngatlanCard";
+
+export default IngatlanCard;
