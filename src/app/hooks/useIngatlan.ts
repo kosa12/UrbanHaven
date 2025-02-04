@@ -28,7 +28,6 @@ const useIngatlan = (id: string | null) => {
           return;
         }
 
-        // If not cached, attempt to fetch from the network
         const response = await axios.get<Ingatlan>(
           `http://localhost:8081/ingatlanok/${id}`
         );

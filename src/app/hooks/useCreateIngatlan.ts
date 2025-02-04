@@ -85,10 +85,12 @@ const useIngatlan = () => {
         throw new Error("Failed to update images.json");
       }
 
+      const tulajdonosId = localStorage.getItem("userId");
+
       // Step 4: Save the ingatlan data to the backend API
       const ingatlanData = {
         ...ingatlan,
-        tulajdonosId: 1,
+        tulajdonosId: parseInt(tulajdonosId || "1"),
       };
 
       await axios.post("http://localhost:8081/ingatlanok", ingatlanData);
@@ -106,7 +108,7 @@ const useIngatlan = () => {
       setImage(null);
 
       // Redirect to the home page
-      router.push("/");
+      router.push("/home");
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred while uploading the ingatlan.");

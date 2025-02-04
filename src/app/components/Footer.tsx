@@ -1,9 +1,16 @@
 "use client";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
+import { useEffect, useState } from "react";
 
 export default function Footer() {
   const { t } = useTranslation();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // Assuming you're using a token to track login
+    setIsLoggedIn(!!token); // Set logged-in state based on token presence
+  }, []);
 
   return (
     <footer className="bg-gray-800 dark:bg-gray-700 text-white py-8">
@@ -14,15 +21,18 @@ export default function Footer() {
             <h3 className="text-xl font-bold mb-4">{t("quickLinks")}</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="hover:text-gray-300">
+                <Link href="/home" className="hover:text-gray-300">
                   {t("home")}
                 </Link>
               </li>
-              <li>
-                <Link href="/upload" className="hover:text-gray-300">
-                  {t("upload")}
-                </Link>
-              </li>
+              {/* Only show the upload link if logged in */}
+              {isLoggedIn && (
+                <li>
+                  <Link href="/upload" className="hover:text-gray-300">
+                    {t("upload")}
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link href="/tos" className="hover:text-gray-300">
                   {t("tos")}
