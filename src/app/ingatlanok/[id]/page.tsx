@@ -13,6 +13,16 @@ const IngatlanDetail = ({ params }: IngatlanDetailProps) => {
   const [paramsUnwrapped, setParamsUnwrapped] = useState<{ id: string } | null>(
     null
   );
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      setUserId(storedUserId);
+    } else {
+      window.location.href = "/login"; // Redirect to login if no userId
+    }
+  }, []);
 
   useEffect(() => {
     params.then((unwrappedParams) => setParamsUnwrapped(unwrappedParams));
@@ -22,8 +32,11 @@ const IngatlanDetail = ({ params }: IngatlanDetailProps) => {
 
   if (loading) return <div>Loading...</div>;
 
+  const isOwner =
+    userId && ingatlan ? ingatlan.tulajdonos.id.toString() === userId : false;
+
   return ingatlan ? (
-    <IngatlanDetails ingatlan={ingatlan} />
+    <IngatlanDetails ingatlan={ingatlan} isOwner={isOwner} />
   ) : (
     <div>No data found.</div>
   );

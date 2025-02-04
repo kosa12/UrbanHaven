@@ -12,10 +12,12 @@ import useDeleteIngatlan from "../hooks/useDeleteIngatlan";
 
 interface IngatlanDetailsProps {
   ingatlan: Ingatlan;
+  isOwner: boolean;
 }
 
 const IngatlanDetails = ({
   ingatlan: initialIngatlan,
+  isOwner,
 }: IngatlanDetailsProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModifyModalOpen, setIsModifyModalOpen] = useState(false);
@@ -54,7 +56,7 @@ const IngatlanDetails = ({
     const success = await deleteIngatlan(ingatlan.id);
     if (success) {
       alert("Ingatlan deleted successfully.");
-      window.location.href = "/";
+      window.location.href = "/home";
     }
   };
 
@@ -67,7 +69,7 @@ const IngatlanDetails = ({
       <Navbar />
 
       <main className="flex-grow container mx-auto p-6 md:p-10">
-        <div className="bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
           <div className="flex flex-col md:flex-row">
             {/* Left Column: Image */}
             <div className="md:w-1/2 mb-6 md:mb-0">
@@ -87,17 +89,19 @@ const IngatlanDetails = ({
 
             {/* Right Column: Details */}
             <div className="md:w-1/2 md:pl-6">
-              <h1 className="text-3xl font-semibold text-gray-800 mb-4">
+              <h1 className="text-3xl font-semibold text-gray-800 dark:text-white mb-4">
                 {ingatlan.cim}
               </h1>
-              <p className="text-lg text-gray-600 mb-4">{ingatlan.leiras}</p>
-              <p className="text-lg text-gray-600 mb-4">
+              <p className="text-lg text-gray-600 dark:text-gray-200 mb-4">
+                {ingatlan.leiras}
+              </p>
+              <p className="text-lg text-gray-600 dark:text-gray-200 mb-4">
                 Allapot: {ingatlan.allapot}
               </p>
-              <p className="text-xl text-blue-600 font-semibold mb-4">
+              <p className="text-xl text-blue-600 dark:text-blue-200 font-semibold mb-4">
                 {ingatlan.arPenz} RON
               </p>
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-gray-500 dark:text-gray-500 mb-4">
                 <strong>{t("uploadedOn")}:</strong> {ingatlan.feltoltesiDatum}
               </p>
               <div className="flex space-x-4">
@@ -107,28 +111,35 @@ const IngatlanDetails = ({
                 >
                   {t("contactOwner")}
                 </button>
-                <div>
-                  <button
-                    className="mt-4 px-6 py-3 bg-yellow-600 text-white font-bold rounded-lg hover:bg-yellow-700 transition-colors duration-200"
-                    onClick={() => setIsModifyModalOpen(true)}
-                  >
-                    Modify
-                  </button>
 
-                  <ModifyIngatlanModal
-                    isOpen={isModifyModalOpen}
-                    onClose={() => setIsModifyModalOpen(false)}
-                    ingatlan={ingatlan}
-                    onSave={handleModify}
-                  />
-                </div>
-                <button
-                  className="mt-4 px-6 py-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors duration-200"
-                  onClick={handleDelete}
-                  disabled={isDeleting}
-                >
-                  {isDeleting ? "Deleting..." : t("delete")}
-                </button>
+                {/* Show Modify and Delete buttons only if the current user is the owner */}
+                {isOwner && (
+                  <>
+                    <div>
+                      <button
+                        className="mt-4 px-6 py-3 bg-yellow-600 text-white font-bold rounded-lg hover:bg-yellow-700 transition-colors duration-200"
+                        onClick={() => setIsModifyModalOpen(true)}
+                      >
+                        Modify
+                      </button>
+
+                      <ModifyIngatlanModal
+                        isOpen={isModifyModalOpen}
+                        onClose={() => setIsModifyModalOpen(false)}
+                        ingatlan={ingatlan}
+                        onSave={handleModify}
+                      />
+                    </div>
+
+                    <button
+                      className="mt-4 px-6 py-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors duration-200"
+                      onClick={handleDelete}
+                      disabled={isDeleting}
+                    >
+                      {isDeleting ? "Deleting..." : t("delete")}
+                    </button>
+                  </>
+                )}
               </div>
               {(error || deleteError) && (
                 <p className="text-red-600 mt-2">{error || deleteError}</p>

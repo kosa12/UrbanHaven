@@ -3,7 +3,7 @@ import i18next from "../../../i18n";
 
 const TermsOfService = () => {
   return (
-    <main className="flex-grow max-w-4xl mx-auto p-6 text-gray-800">
+    <main className="flex-grow max-w-4xl mx-auto p-6 text-gray-800 dark:text-white">
       <h1 className="text-3xl font-bold mb-4">{i18next.t("tos")}</h1>
       <p className="mb-4">
         {i18next.t("termsOfService.lastUpdated", { date: "January 31, 2025" })}

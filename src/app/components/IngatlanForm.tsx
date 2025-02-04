@@ -2,15 +2,17 @@ import { FC } from "react";
 import useIngatlan from "../hooks/useCreateIngatlan";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "next-i18next";
 
 interface IngatlanFormProps {
   router: any;
 }
 
-const IngatlanForm: FC<IngatlanFormProps> = ({ router }) => {
+const IngatlanForm: FC<IngatlanFormProps> = () => {
   const { ingatlan, handleIngatlanChange, handleImageChange, handleSubmit } =
     useIngatlan();
+  const router = useRouter();
 
   const { t } = useTranslation();
 
@@ -139,6 +141,10 @@ const IngatlanForm: FC<IngatlanFormProps> = ({ router }) => {
           <div className="flex justify-center">
             <button
               type="submit"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit(router); // Pass the router here
+              }}
               className="mt-6 px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-600 transition"
             >
               Upload

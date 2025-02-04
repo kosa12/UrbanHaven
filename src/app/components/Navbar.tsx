@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import i18next from "../../../i18n";
+import UserDropdown from "./UserDropdown"; // Import the new UserDropdown component
 
 const languages = [
   { code: "en", label: "🇬🇧 English" },
@@ -24,8 +25,8 @@ export default function Navbar() {
   );
   const [themeIndex, setThemeIndex] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Retrieve language from localStorage and set it
   useEffect(() => {
     const savedLanguage = localStorage.getItem("language");
     if (savedLanguage) {
@@ -42,6 +43,12 @@ export default function Navbar() {
       setThemeIndex(index);
       document.documentElement.classList.add(savedTheme!);
     }
+  }, []);
+
+  // Check for authentication (example using localStorage for JWT or user ID)
+  useEffect(() => {
+    const userToken = localStorage.getItem("token"); // Or check for a user ID
+    setIsLoggedIn(!!userToken); // Set logged in state
   }, []);
 
   const handleLanguageChange = (lang: string) => {
@@ -72,6 +79,15 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    setIsLoggedIn(false);
+    router.push("/home");
+    window.location.reload();
+  };
+
   return (
     <nav
       className={`navbar ${
@@ -79,12 +95,14 @@ export default function Navbar() {
       } text-foreground px-6 py-3 flex justify-between items-center transition-all duration-300`}
     >
       <div className="flex space-x-6">
-        <Link href="/" className="text-xl hover:opacity-80">
+        <Link href="/home" className="text-xl hover:opacity-80">
           {i18next.t("home")}
         </Link>
-        <Link href="/upload" className="text-xl hover:opacity-80">
-          {i18next.t("upload")}
-        </Link>
+        {isLoggedIn && (
+          <Link href="/upload" className="text-xl hover:opacity-80">
+            {i18next.t("upload")}
+          </Link>
+        )}
         <Link href="/tos" className="text-xl hover:opacity-80">
           {i18next.t("tos")}
         </Link>
@@ -115,6 +133,9 @@ export default function Navbar() {
         >
           {languages.find((l) => l.code === selectedLanguage)?.label}
         </button>
+
+        {/* User Dropdown Button */}
+        <UserDropdown isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       </div>
     </nav>
   );

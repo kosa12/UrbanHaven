@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import "./styles/globals.css";
 import { QueryProvider } from "./providers";
+import { AuthProvider } from "./context/authContext";
 
 export default function RootLayout({
   children,
@@ -33,7 +34,9 @@ export default function RootLayout({
         <link rel="icon" href="/icons/icon.png" />
       </head>
       <body>
-        <QueryProvider>{children}</QueryProvider>
+        <AuthProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </AuthProvider>
       </body>
     </html>
   );

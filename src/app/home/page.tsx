@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { useTranslation } from "next-i18next";
 import axios from "axios";
-import IngatlanCard from "./components/IngatlanCard";
-import { Ingatlan } from "./types";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import useImageUrls from "./hooks/useImageUrls";
-import SkeletonCard from "./components/SkeletonCard"; // Import the SkeletonCard
-import "../../i18n";
+import IngatlanCard from "../../app/components/IngatlanCard";
+import { Ingatlan } from "../../app/types";
+import Navbar from "../../app/components/Navbar";
+import Footer from "../../app/components/Footer";
+import useImageUrls from "../../app/hooks/useImageUrls";
+import SkeletonCard from "../../app/components/SkeletonCard"; // Import the SkeletonCard
+import "../../../i18n";
 
 export default function Home() {
   const { t } = useTranslation();

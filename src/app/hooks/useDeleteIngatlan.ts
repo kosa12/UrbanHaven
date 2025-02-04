@@ -16,6 +16,7 @@ const useDeleteIngatlan = () => {
 
       await deleteCache(`/ingatlanok/${ingatlanId}`);
       setIsDeleting(false);
+
       return true;
     } catch (err) {
       setIsDeleting(false);
