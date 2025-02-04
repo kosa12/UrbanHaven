@@ -16,7 +16,7 @@ Urban Haven is a modern, responsive property listing website built with Next.js,
   - Workbox & Manifest: Enables offline functionality and app-like installation.
   - Service Worker Cache: Improves performance by caching assets for offline use.
 - **Multi-language Support**: Supports multiple languages for a global audience (en, hu, ro)
-- **Authentication & Authorization**: *Coming soon* (Work in progress).
+- **Authentication & Authorization**: JWT based
 
 ## Technologies Used
 
